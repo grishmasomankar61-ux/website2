@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Futuristic Studio</title>
+  <style>
+    :root {
+      --bg: #f7fbff;
+      --card: rgba(255, 255, 255, 0.58);
+      --text: #12233b;
+      --muted: #5a6d86;
+      --accent: #7c7cff;
+      --mint: #8df5cf;
+      --line: rgba(35, 72, 134, 0.12);
+      --shadow: 0 15px 60px rgba(115, 135, 220, 0.18);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(122, 215, 255, 0.6), transparent 25%),
+        radial-gradient(circle at top right, rgba(178, 97, 255, 0.25), transparent 28%),
+        radial-gradient(circle at bottom center, rgba(117, 255, 200, 0.35), transparent 35%),
+        var(--bg);
+      overflow-x: hidden;
+    }
+
+    .cursor-glow {
+      position: fixed;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(120, 188, 255, 0.35), rgba(148, 113, 255, 0.1), transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+      transform: translate(-50%, -50%);
+      filter: blur(8px);
+      transition: opacity 0.25s ease;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero {
+      min-height: 100vh;
+      padding: 24px;
+      display: grid;
+      place-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before, .hero::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(12px);
+      opacity: 0.7;
+      animation: floatBlob 12s infinite ease-in-out;
+    }
+
+    .hero::before {
+      width: 360px;
+      height: 360px;
+      background: rgba(125, 161, 255, 0.35);
+      top: 5%;
+      left: 5%;
+    }
+
+    .hero::after {
+      width: 320px;
+      height: 320px;
+      background: rgba(109, 251, 202, 0.35);
+      bottom: 8%;
+      right: 10%;
+      animation-delay: -5s;
+    }
+
+    @keyframes floatBlob {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-20px) scale(1.06); }
+    }
+
+    .hero-shell {
+      width: min(1200px, 100%);
+      position: relative;
+      background: rgba(255,255,255,0.36);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(255,255,255,0.55);
+      border-radius: 32px;
+      box-shadow: var(--shadow);
+      padding: 28px;
+      overflow: hidden;
+    }
+
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 36px;
+    }
+
+    .brand {
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 18px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .pill {
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.8);
+      border: 1px solid rgba(112, 126, 168, 0.18);
+      box-shadow: 0 6px 20px rgba(101,120,176,0.12);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      background: linear-gradient(90deg, rgba(125,161,255,.18), rgba(152,231,253,.28));
+      border: 1px solid rgba(140, 173, 255, 0.35);
+      border-radius: 999px;
+      padding: 8px 14px;
+      color: #5b70a7;
+      font-size: 0.82rem;
+      margin-bottom: 18px;
+      backdrop-filter: blur(14px);
+    }
+
+    h1 {
+      font-size: clamp(3rem, 8vw, 6.8rem);
+      line-height: 0.94;
+      margin: 0 0 18px;
+      letter-spacing: -0.07em;
+      font-weight: 900;
+    }
+
+    .gradient-text {
+      background: linear-gradient(90deg, #3f72ff, #8d6bff, #50d4ff, #7af0bf);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-size: 220% 220%;
+      animation: gradientShift 6s ease infinite;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .subtext {
+      max-width: 620px;
+      font-size: 1.08rem;
+      line-height: 1.75;
+      color: var(--muted);
+    }
+
+    .cta-row {
+      display: flex;
+      gap: 14px;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: none;
+      cursor: pointer;
+      padding: 14px 22px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.97rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .btn:hover { transform: translateY(-2px) scale(1.02); }
+
+    .btn.primary {
+      color: white;
+      background: linear-gradient(135deg, #4e8bff, #7a79ff, #7bdbff);
+      box-shadow: 0 12px 40px rgba(110, 115, 255, 0.38);
+    }
+
+    .btn.secondary {
+      color: var(--text);
+      background: rgba(255,255,255,0.78);
+      border: 1px solid rgba(114, 121, 166, 0.2);
+    }
+
+    .mockup {
+      position: relative;
+      min-height: 520px;
+      border-radius: 26px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.72), rgba(225,241,255,.45));
+      border: 1px solid rgba(132, 153, 204, 0.24);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .orb {
+      position: absolute;
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #ffffff, #9ad6ff 40%, #7d69ff 72%, rgba(125, 105, 255, 0.1) 100%);
+      filter: blur(0.3px);
+      box-shadow: inset 0 0 40px rgba(255,255,255,0.72), 0 24px 80px rgba(104, 98, 255, 0.25);
+      animation: orbitPulse 7s infinite ease-in-out;
+    }
+
+    @keyframes orbitPulse {
+      0%,100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-18px) scale(1.05); }
+    }
+
+    .glass-card {
+      position: absolute;
+      background: rgba(255,255,255,0.55);
+      border: 1px solid rgba(255,255,255,0.62);
+      backdrop-filter: blur(18px);
+      border-radius: 22px;
+      box-shadow: 0 12px 40px rgba(90, 120, 190, 0.18);
+    }
+
+    .card-a { width: 180px; height: 120px; top: 52px; right: 34px; }
+    .card-b { width: 210px; height: 140px; bottom: 36px; left: 38px; }
+    .card-c { width: 130px; height: 130px; bottom: 58px; right: 56px; }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 30px;
+    }
+
+    .stat {
+      padding: 14px 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.56);
+      border: 1px solid rgba(134, 155, 208, 0.2);
+      box-shadow: var(--shadow);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.5rem;
+      margin-bottom: 4px;
+    }
+
+    .section {
+      padding: 90px 24px;
+    }
+
+    .section-wrap {
+      width: min(1200px, 100%);
+      margin: 0 auto;
+    }
+
+    .section-head {
+      text-align: center;
+      margin-bottom: 42px;
+    }
+
+    .section-head h2 {
+      font-size: clamp(2rem, 5vw, 4rem);
+      margin: 0 0 12px;
+      letter-spacing: -0.05em;
+    }
+
+    .section-head p {
+      max-width: 720px;
+      margin: 0 auto;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .feature-grid, .pricing-grid, .testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .feature-card, .pricing-card, .testimonial {
+      background: rgba(255,255,255,0.52);
+      border: 1px solid rgba(134,155,208,0.22);
+      border-radius: 26px;
+      padding: 22px;
+      backdrop-filter: blur(18px);
+      box-shadow: 0 14px 44px rgba(89,112,170,0.14);
+      transform-style: preserve-3d;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .feature-card:hover, .pricing-card:hover, .testimonial:hover {
+      transform: translateY(-6px) rotateX(3deg) rotateY(-3deg);
+      box-shadow: 0 24px 68px rgba(83, 103, 167, 0.22);
+    }
+
+    .icon-box {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, rgba(112,168,255,0.24), rgba(137,242,204,0.24));
+      border: 1px solid rgba(121,165,255,0.28);
+      margin-bottom: 16px;
+      font-size: 1.15rem;
+    }
+
+    .pricing-card.featured {
+      background: linear-gradient(180deg, rgba(255,255,255,.76), rgba(231,243,255,.58));
+      border-color: rgba(103,142,255,0.45);
+      box-shadow: 0 22px 65px rgba(109,137,230,0.28);
+    }
+
+    .price {
+      font-size: 2.7rem;
+      font-weight: 900;
+      letter-spacing: -0.06em;
+      margin: 10px 0;
+    }
+
+    .faq {
+      display: grid;
+      gap: 12px;
+    }
+
+    .faq-item {
+      background: rgba(255,255,255,0.56);
+      border: 1px solid rgba(134,155,208,0.22);
+      border-radius: 18px;
+      padding: 16px 18px;
+      overflow: hidden;
+    }
+
+    .faq-question {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.28s ease;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    form {
+      display: grid;
+      gap: 14px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(121, 141, 192, 0.24);
+      background: rgba(255,255,255,0.68);
+      color: var(--text);
+      outline: none;
+      font: inherit;
+    }
+
+    input:focus, textarea:focus {
+      border-color: rgba(95, 132, 255, 0.64);
+      box-shadow: 0 0 0 4px rgba(115, 154, 255, 0.16);
+    }
+
+    .error {
+      font-size: 0.85rem;
+      color: #d1435b;
+      min-height: 1.2em;
+    }
+
+    .marquee {
+      overflow: hidden;
+      white-space: nowrap;
+      padding: 12px 0;
+      border-top: 1px solid rgba(121,141,192,.18);
+      border-bottom: 1px solid rgba(121,141,192,.18);
+      margin: 42px 0;
+      background: rgba(255,255,255,0.4);
+    }
+
+    .marquee-track {
+      display: inline-flex;
+      gap: 30px;
+      min-width: max-content;
+      animation: marquee 20s linear infinite;
+    }
+
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    .logo-pill {
+      background: rgba(255,255,255,0.72);
+      border: 1px solid rgba(114,130,176,.18);
+      border-radius: 999px;
+      padding: 10px 16px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #5b6f99;
+    }
+
+    .wave {
+      height: 100px;
+      width: 100%;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(138, 233, 255, 0.5), transparent 42%),
+        linear-gradient(180deg, rgba(255,255,255,0), rgba(255,255,255,0.4));
+      margin-top: 28px;
+    }
+
+    .dark-mode {
+      --bg: #071120;
+      --card: rgba(13, 22, 42, 0.62);
+      --text: #eff7ff;
+      --muted: #a2b8d3;
+      --line: rgba(121, 150, 206, 0.16);
+      --shadow: 0 16px 60px rgba(0, 0, 0, 0.35);
+    }
+
+    @media (max-width: 900px) {
+      .hero-grid, .feature-grid, .pricing-grid, .testimonial-grid, .stats {
+        grid-template-columns: 1fr;
+      }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="cursor-glow" id="cursorGlow"></div>
+
+  <div class="page">
+    <section class="hero">
+      <div class="hero-shell">
+        <nav class="nav">
+          <div class="brand">NOVA/AI</div>
+          <div class="nav-links">
+            <span>Studio</span>
+            <span>Work</span>
+            <span>Pricing</span>
+            <span>Contact</span>
+          </div>
+          <button class="pill" id="themeToggle">🌙 Night Mode</button>
+        </nav>
+
+        <div class="hero-grid">
+          <div>
+            <div class="eyebrow">Future-crafted experiences • ultra-premium</div>
+            <h1>
+              Build the <span class="gradient-text">impossible</span>
+              with fearless design.
+            </h1>
+            <p class="subtext">
+              A high-velocity creative system for next-gen brands, blending cinematic motion,
+              immersive 3D depth, and elegant conversion storytelling.
+            </p>
+
+            <div class="cta-row">
+              <button class="btn primary">Launch the Future</button>
+              <button class="btn secondary">See Live Case Study</button>
+            </div>
+
+            <div class="stats">
+              <div class="stat"><strong>128%</strong> faster concept shipping</div>
+              <div class="stat"><strong>24</strong> global launch partners</div>
+              <div class="stat"><strong>99.9%</strong> delight retention</div>
+            </div>
+          </div>
+
+          <div class="mockup">
+            <div class="orb"></div>
+            <div class="glass-card card-a"></div>
+            <div class="glass-card card-b"></div>
+            <div class="glass-card card-c"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="wave"></div>
+
+    <section class="section">
+      <div class="section-wrap">
+        <div class="section-head">
+          <h2>Where motion becomes a moat</h2>
+          <p>
+            We engineer bold interfaces with velvet transitions, luminous gradients, and tactile depth that look and feel alive.
+          </p>
+        </div>
+
+        <div class="feature-grid">
+          <div class="feature-card">
+            <div class="icon-box">🚀</div>
+            <h3>Kinetic brand systems</h3>
+            <p>Scroll-based storytelling, reveal sequences, and polished micro-interactions that convert curiosity into action.</p>
+          </div>
+          <div class="feature-card">
+            <div class="icon-box">✨</div>
+            <h3>Liquid visual depth</h3>
+            <p>Glassmorphism, floating layers, and layered gradients that create a premium and futuristic visual signature.</p>
+          </div>
+          <div class="feature-card">
+            <div class="icon-box">💎</div>
+            <h3>Interactive conversion UX</h3>
+            <p>Responsive layout, precision motion cues, and friction-free interaction design that prioritizes clarity.</p>
+          </div>
+        </div>
+
+        <div class="marquee">
+          <div class="marquee-track">
+            <div class="logo-pill">Awwwards</div>
+            <div class="logo-pill">FWA</div>
+            <div class="logo-pill">Rethink</div>
+            <div class="logo-pill">Motion Lab</div>
+            <div class="logo-pill">Awwwards</div>
+            <div class="logo-pill">FWA</div>
+            <div class="logo-pill">Rethink</div>
+            <div class="logo-pill">Motion Lab</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-wrap">
+        <div class="section-head">
+          <h2>See the numbers move</h2>
+          <p>Performance and creative intensity working in perfect harmony.</p>
+        </div>
+
+        <div class="stats">
+          <div class="stat"><strong>3.4x</strong> engagement lift</div>
+          <div class="stat"><strong>62%</strong> more qualified leads</div>
+          <div class="stat"><strong>11ms</strong> interaction response</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-wrap">
+        <div class="section-head">
+          <h2>Premium launch plans</h2>
+          <p>Choose the package that matches your next breakthrough.</p>
+        </div>
+
+        <div class="pricing-grid">
+          <div class="pricing-card">
+            <h3>Starter</h3>
+            <div class="price">$399</div>
+            <p>One signature landing page with refined animations.</p>
+          </div>
+          <div class="pricing-card featured">
+            <h3>Studio</h3>
+            <div class="price">$899</div>
+            <p>Multi-section storytelling experience with premium interactions.</p>
+          </div>
+          <div class="pricing-card">
+            <h3>Signal</h3>
+            <div class="price">$1499</div>
+            <p>Luxury launch system with conversion-focused motion architecture.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-wrap">
+        <div class="section-head">
+          <h2>What clients say</h2>
+          <p>The movement is not just visual—it changes how people remember your brand.</p>
+        </div>
+
+        <div class="testimonial-grid">
+          <div class="testimonial">
+            <p>“It felt like we launched a product and a universe at the same time.”</p>
+            <strong>— Lila Hart, Founder</strong>
+          </div>
+          <div class="testimonial">
+            <p>“The interaction design made our story impossible to ignore.”</p>
+            <strong>— Ian Sato, CMO</strong>
+          </div>
+          <div class="testimonial">
+            <p>“The page looked like the future and converted like a machine.”</p>
+            <strong>— Maya Chen, Growth Lead</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-wrap">
+        <div class="section-head">
+          <h2>Frequently asked questions</h2>
+        </div>
+
+        <div class="faq">
+          <div class="faq-item">
+            <div class="faq-question">How fast can this launch?<span>+</span></div>
+            <div class="faq-answer"><p>In most cases, a polished one-page launch can ship in under a week with refined motion and responsive behavior.</p></div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question">Does it work well on mobile?<span>+</span></div>
+            <div class="faq-answer"><p>Yes. The layout compresses elegantly while preserving visual hierarchy, texture, and interaction clarity.</p></div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-question">Can the design feel more premium?<span>+</span></div>
+            <div class="faq-answer"><p>Absolutely. Layered depth, animation timing, texture, and glass finish can be tailored to fit a luxury brand tone.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-wrap">
+        <div class="section-head">
+          <h2>Start the conversation</h2>
+          <p>Tell us what you’re building and we’ll turn it into a launch-ready story.</p>
+        </div>
+
+        <div class="feature-grid">
+          <div class="feature-card">
+            <form id="contactForm">
+              <input type="text" id="name" placeholder="Your name" />
+              <div class="error" id="nameError"></div>
+
+              <input type="email" id="email" placeholder="Email address" />
+              <div class="error" id="emailError"></div>
+
+              <textarea rows="4" id="message" placeholder="Tell us about your project"></textarea>
+              <div class="error" id="messageError"></div>
+
+              <button class="btn primary" type="submit">Send Inquiry</button>
+            </form>
+          </div>
+
+          <div class="feature-card">
+            <h3>Creative Stack</h3>
+            <p>Landing pages, launch narratives, premium visuals, and motion systems for ambitious brands.</p>
+            <ul>
+              <li>Reactive interface design</li>
+              <li>High-end motion language</li>
+              <li>Conversion-first storytelling</li>
+            </ul>
+          </div>
+
+          <div class="feature-card">
+            <h3>Why it wins</h3>
+            <p>It blends drama, clarity, speed, and premium polish in one focused web experience.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const cursorGlow = document.getElementById('cursorGlow');
+    window.addEventListener('mousemove', (e) => {
+      cursorGlow.style.left = `${e.clientX}px`;
+      cursorGlow.style.top = `${e.clientY}px`;
+    });
+
+    const faqItems = document.querySelectorAll('.faq-item');
+    faqItems.forEach(item => {
+      const question = item.querySelector('.faq-question');
+      const answer = item.querySelector('.faq-answer');
+      question.addEventListener('click', () => {
+        const isOpen = item.classList.contains('open');
+        item.classList.toggle('open', !isOpen);
+        answer.style.maxHeight = isOpen ? '0px' : `${answer.scrollHeight}px`;
+      });
+    });
+
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      themeToggle.textContent = document.body.classList.contains('dark-mode') ? '☀️ Light Mode' : '🌙 Night Mode';
+    });
+
+    const form = document.getElementById('contactForm');
+    const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
+    const messageInput = document.getElementById('message');
+
+    function validateField(id, value, type = 'text') {
+      if (!value.trim()) {
+        return 'This field is required.';
+      }
+      if (type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+        return 'Please enter a valid email.';
+      }
+      return '';
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const nameError = validateField('name', nameInput.value);
+      const emailError = validateField('email', emailInput.value, 'email');
+      const messageError = validateField('message', messageInput.value);
+
+      document.getElementById('nameError').textContent = nameError;
+      document.getElementById('emailError').textContent = emailError;
+      document.getElementById('messageError').textContent = messageError;
+
+      if (!nameError && !emailError && !messageError) {
+        alert('Inquiry sent — your future launch is on the way.');
+        form.reset();
+      }
+    });
+  </script>
+</body>
+</html>
